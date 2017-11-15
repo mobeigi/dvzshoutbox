@@ -6,6 +6,7 @@ $plugins->add_hook('global_start', ['dvz_shoutbox', 'global_start']);   // cache
 $plugins->add_hook('global_end',   ['dvz_shoutbox', 'global_end']);    // catch archive page
 $plugins->add_hook('xmlhttp',      ['dvz_shoutbox', 'xmlhttp']);      // xmlhttp.php listening
 $plugins->add_hook('index_end',    ['dvz_shoutbox', 'load_window']); // load Shoutbox window to {$dvz_shoutbox} variable
+$plugins->add_hook('portal_end', ['dvz_shoutbox', 'load_window']); //Added manually for portal page
 
 $plugins->add_hook('admin_config_settings_change', ['dvz_shoutbox', 'admin_config_settings_change']);
 $plugins->add_hook('admin_user_users_merge_commit', ['dvz_shoutbox', 'user_merge']);
@@ -293,7 +294,7 @@ always=Always check if on display to refresh',
 
         'dvz_shoutbox' => '<div id="shoutbox" class="front{$classes}">
 
-<div class="head">
+<div class="thead head">
 <strong>{$lang->dvz_sb_shoutbox}</strong>
 <p class="right"><a href="{$mybb->settings[\'bburl\']}/index.php?action=shoutbox_archive">&laquo; {$lang->dvz_sb_archivelink}</a></p>
 </div>
@@ -334,7 +335,7 @@ always=Always check if on display to refresh',
 
 <div id="shoutbox">
 
-<div class="head">
+<div class="thead head">
 <strong>{$lang->dvz_sb_archive}</strong>
 {$last_read_link}
 </div>
@@ -1283,7 +1284,7 @@ dvz_shoutbox.lang = [\'' . $lang->dvz_sb_delete_confirm . '\', \'' . str_replace
         $date     = htmlspecialchars_uni(my_date($mybb->settings['dvz_sb_dateformat'], $data['date']));
         $username = htmlspecialchars_uni($data['username']);
         $user     = build_profile_link(format_name($username, $data['usergroup'], $data['displaygroup']), (int)$data['uid']);
-        $avatar   = '<img src="' . (empty($data['avatar']) ? htmlspecialchars_uni($mybb->settings['useravatar']) : htmlspecialchars_uni($data['avatar'])) . '" alt="avatar" />';
+        $avatar   = '<span style="color: #b9b9b9;cursor: pointer;display: inline-flex;">@&nbsp;<img src="' . (empty($data['avatar']) ? htmlspecialchars_uni($mybb->settings['useravatar']) : htmlspecialchars_uni($data['avatar'])) . '" alt="avatar" /></span>';
 
         $staticLink = $mybb->settings['bburl'] . '/index.php?action=shoutbox_archive&sid=' . $id . '#sid' . $id;
 
@@ -1307,7 +1308,7 @@ dvz_shoutbox.lang = [\'' . $lang->dvz_sb_delete_confirm . '\', \'' . str_replace
                 self::access_mod() ||
                 (self::access_mod_own() && $own)
             ) {
-                $notes .= '<a href="" class="mod edit">E</a><a href="" class="mod del">X</a>';
+                $notes .= '<a href="" class="mod edit">EDIT</a><a href="" class="mod del">X</a>';
             }
 
             $attributes .= ' id="sid' . $id . '"';

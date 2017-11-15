@@ -435,6 +435,9 @@ var dvz_shoutbox = {
                 dvz_shoutbox.callbacks[name][i](data);
             }
         }
+        
+        //VIP special name callback here to ensure names are properly highlighted
+        $.fn.vipspecialnames();
     },
 
     // visual
@@ -503,7 +506,7 @@ var dvz_shoutbox = {
         $('#shoutbox .entry:not([data-parsed])').each(function() {
 
             if (typeof $(this).attr('data-mod') !== 'undefined') {
-                $(this).children('.info').prepend('<a href="" class="mod edit">E</a><a href="" class="mod del">X</a>');
+                $(this).children('.info').prepend('<a href="" class="mod edit">EDIT</a><a href="" class="mod del">X</a>');
             }
 
             if (dvz_shoutbox.markUnread) {
@@ -527,7 +530,19 @@ var dvz_shoutbox = {
             }
         }
     },
-
+    
+    insert_mycode: function(mycode, promptTitle, promptDefault) {
+        var input = prompt(promptTitle, promptDefault);
+        if (input === null)
+            return;
+      
+        $('#shoutbox input.text').val($('#shoutbox input.text').val() + '[' + mycode + ']' + input + '[/' + mycode + ']');
+        
+        //focus and select end of input
+        var fldLength = $('#shoutbox input.text').val().length;
+        $('#shoutbox input.text').focus();
+        $('#shoutbox input.text')[0].setSelectionRange(fldLength, fldLength);
+    },
 };
 
 $(document).on('click', '#shoutbox .head', function() {
@@ -590,4 +605,35 @@ $(function(){
     } else {
         $('#shoutbox .window').scrollTop(0);
     }
+});
+
+//MyCode inserters
+$(document).on('click', '#shoutbox p.right a#mycode_youtube', function() {
+    dvz_shoutbox.insert_mycode('sb_youtube','Enter a Youtube video URL','');
+    return false;
+});
+
+$(document).on('click', '#shoutbox p.right a#mycode_soundcloud', function() {
+    dvz_shoutbox.insert_mycode('sb_soundcloud','Enter a SoundCloud URL','');
+    return false;
+});
+
+$(document).on('click', '#shoutbox p.right a#mycode_img', function() {
+    dvz_shoutbox.insert_mycode('sb_img','Enter an image URL (whitelisted)','');
+    return false;
+});
+
+$(document).on('click', '#shoutbox p.right a#mycode_webm', function() {
+    dvz_shoutbox.insert_mycode('sb_webm','Enter a WEBM URL (whitelisted)','');
+    return false;
+});
+
+$(document).on('click', '#shoutbox p.right a#mycode_webm-la', function() {
+    dvz_shoutbox.insert_mycode('sb_webm-la','Enter a WEBM URL (whitelisted)','');
+    return false;
+});
+
+$(document).on('click', '#shoutbox p.right a#mycode_gifv', function() {
+    dvz_shoutbox.insert_mycode('sb_gifv','Enter a GIFV URL (whitelisted)','');
+    return false;
 });
